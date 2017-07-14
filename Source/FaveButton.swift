@@ -44,7 +44,7 @@ open class FaveButton: UIButton {
     
     fileprivate struct Const{
         static let duration             = 1.0
-        static let expandDuration       = 0.1298 
+        static let expandDuration       = 0.1298
         static let collapseDuration     = 0.1089
         static let faveIconShowDelay    = Const.expandDuration + Const.collapseDuration/2.0
         static let dotRadiusFactors     = (first: 0.0633, second: 0.04)
@@ -57,6 +57,9 @@ open class FaveButton: UIButton {
     @IBInspectable open var circleFromColor: UIColor = UIColor(colorLiteralRed: 221/255, green: 70/255,  blue: 136/255, alpha: 1)
     @IBInspectable open var circleToColor: UIColor   = UIColor(colorLiteralRed: 205/255, green: 143/255, blue: 246/255, alpha: 1)
     @IBInspectable open var selectedImage: UIImage?
+    @IBInspectable open var showHUD: Bool = false
+    @IBInspectable open var widthToHUD: CGFloat = UIScreen.main.bounds.width * 0.2
+    @IBInspectable open var durationToHUD: TimeInterval = 1
     
     @IBOutlet open weak var delegate: AnyObject?
     
@@ -64,15 +67,31 @@ open class FaveButton: UIButton {
     
     fileprivate var faveIconImage:UIImage?
     fileprivate var faveIcon: FaveIcon!
-    open var animationsEnabled = true
+    fileprivate var animationsEnabled = true
     
     override open var isSelected: Bool {
         didSet {
-            guard self.animationsEnabled else {
-                return
-            }
+            guard self.animationsEnabled else { return }
             
-            animateSelect(self.isSelected, duration: Const.duration)
+            if showHUD && isSelected {
+                guard let window = UIApplication.shared.keyWindow else { return }
+                let button = FaveButton(frame: CGRect(x: 0, y: 0, width: widthToHUD, height: widthToHUD), faveIconNormal: selectedImage ?? image(for: .normal))
+                button.center = window.center
+                button.normalColor = normalColor
+                button.selectedColor = selectedColor
+                button.isUserInteractionEnabled = false
+                window.addSubview(button)
+                button.isSelected = true
+                UIView.animate(withDuration: 0.5, animations: {
+                    button.alpha = 0
+                }) { _ in
+                    button.removeFromSuperview()
+                }
+                faveIcon.animateSelect(isSelected, fillColor: selectedColor, duration: Const.duration, delay: 0)
+                
+            } else {
+                animateSelect(self.isSelected, duration: Const.duration)
+            }
         }
     }
     
@@ -116,7 +135,6 @@ open class FaveButton: UIButton {
         animateSelect(self.isSelected, duration: 0.0) // trigger state change without animation
     }
 }
-
 
 // MARK: create
 extension FaveButton {
@@ -223,7 +241,7 @@ extension FaveButton{
             
             ring.animateToRadius(radius, toColor: circleToColor, duration: Const.expandDuration, delay: 0)
             ring.animateColapse(radius, duration: Const.collapseDuration, delay: Const.expandDuration)
-
+            
             sparks.forEach{
                 $0.animateIgniteShow(igniteToRadius, duration:0.4, delay: Const.collapseDuration/3.0)
                 $0.animateIgniteHide(0.7, delay: 0.2)
@@ -231,22 +249,3 @@ extension FaveButton{
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
