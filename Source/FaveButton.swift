@@ -64,7 +64,7 @@ open class FaveButton: UIButton {
     
     fileprivate var faveIconImage:UIImage?
     fileprivate var faveIcon: FaveIcon!
-    fileprivate var animationsEnabled = true
+    open var animationsEnabled = true
     
     override open var isSelected: Bool {
         didSet {
