@@ -56,7 +56,6 @@ open class FaveButton: UIButton {
     @IBInspectable open var dotSecondColor: UIColor  = UIColor(colorLiteralRed: 247/255, green: 188/255, blue: 48/255,  alpha: 1)
     @IBInspectable open var circleFromColor: UIColor = UIColor(colorLiteralRed: 221/255, green: 70/255,  blue: 136/255, alpha: 1)
     @IBInspectable open var circleToColor: UIColor   = UIColor(colorLiteralRed: 205/255, green: 143/255, blue: 246/255, alpha: 1)
-    @IBInspectable open var selectedImage: UIImage?
     @IBInspectable open var showHUD: Bool = false
     @IBInspectable open var widthToHUD: CGFloat = UIScreen.main.bounds.width * 0.2
     @IBInspectable open var durationToHUD: TimeInterval = 1
@@ -64,7 +63,7 @@ open class FaveButton: UIButton {
     @IBOutlet open weak var delegate: AnyObject?
     
     fileprivate(set) var sparkGroupCount: Int = 7
-    
+    fileprivate var selectedImage: UIImage?
     fileprivate var faveIconImage:UIImage?
     fileprivate var faveIcon: FaveIcon!
     fileprivate var animationsEnabled = true
@@ -141,16 +140,20 @@ extension FaveButton {
     fileprivate func applyInit() {
         
         if nil == faveIconImage {
-            faveIconImage = image(for: UIControlState())
+            faveIconImage = image(for: .normal)
+        }
+        
+        if nil == selectedImage {
+            selectedImage = image(for: .selected)
         }
         
         guard let faveIconImage = faveIconImage else {
             fatalError("please provide an image for normal state.")
         }
         
-        setImage(UIImage(), for: UIControlState())
+        setImage(UIImage(), for: .normal)
         setImage(UIImage(), for: .selected)
-        setTitle(nil, for: UIControlState())
+        setTitle(nil, for: .normal)
         setTitle(nil, for: .selected)
         
         faveIcon = createFaveIcon(faveIconImage)
