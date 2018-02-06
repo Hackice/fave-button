@@ -26,7 +26,7 @@ import UIKit
 
 internal typealias DotRadius = (first: Double, second: Double)
 
-class Spark: UIView {
+open class Spark: UIView {
     
     fileprivate struct Const {
         static let distance = (vertical: 4.0, horizontal: 0.0)
@@ -56,7 +56,7 @@ class Spark: UIView {
         applyInit()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

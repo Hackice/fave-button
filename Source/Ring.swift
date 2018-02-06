@@ -24,7 +24,7 @@
 
 import UIKit
 
-class Ring: UIView {
+open class Ring: UIView {
     
     fileprivate struct Const {
         static let collapseAnimation = "collapseAnimation"
@@ -45,7 +45,7 @@ class Ring: UIView {
         applyInit()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -201,7 +201,7 @@ extension Ring {
 // MARK: CAAnimationDelegate
 extension Ring: CAAnimationDelegate {
     
-    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         if let _ = anim.value(forKey: Const.collapseAnimation) {
             self.removeFromSuperview()
         }
