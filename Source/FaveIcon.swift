@@ -119,7 +119,7 @@ extension FaveIcon {
                 options: .curveLinear,
                 animations: {
                     self.alpha = 1
-                }, completion: nil)
+            }, completion: nil)
         }
         
         guard animate else {

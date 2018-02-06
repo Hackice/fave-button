@@ -24,8 +24,7 @@
 
 import Foundation
 
-
-func Init<T>( _ object: T, block: (T) throws -> ()) rethrows -> T{
+func Init<T>( _ object: T, block: (T) throws -> Void) rethrows -> T {
     try block(object)
     return object
 }

@@ -24,10 +24,8 @@
 
 import UIKit
 
-
-struct Constraint{
+struct Constraint {
     var identifier: String?
-    
     var attribute: NSLayoutAttribute = .centerX
     var secondAttribute: NSLayoutAttribute = .notAnAttribute
     var constant: CGFloat = 0
@@ -35,15 +33,14 @@ struct Constraint{
     var relation: NSLayoutRelation = .equal
 }
 
-func attributes(_ attrs:NSLayoutAttribute...) -> [NSLayoutAttribute]{
+func attributes(_ attrs: NSLayoutAttribute...) -> [NSLayoutAttribute] {
     return attrs
 }
 
 //infix operator >>- { associativity left precedence 160 }
-infix operator >>- : DefaultPrecedence
+infix operator >>-: DefaultPrecedence
 
-
-@discardableResult func >>- <T: UIView> (lhs: (T,T), apply: (inout Constraint) -> () ) -> NSLayoutConstraint {
+@discardableResult func >>- <T: UIView> (lhs: (T, T), apply: (inout Constraint) -> Void) -> NSLayoutConstraint {
     var const = Constraint()
     apply(&const)
     
@@ -63,8 +60,7 @@ infix operator >>- : DefaultPrecedence
     return constraint
 }
 
-
-@discardableResult  func >>- <T: UIView> (lhs: T, apply: (inout Constraint) -> () ) -> NSLayoutConstraint {
+@discardableResult func >>- <T: UIView> (lhs: T, apply: (inout Constraint) -> Void) -> NSLayoutConstraint {
     var const = Constraint()
     apply(&const)
     
@@ -81,22 +77,18 @@ infix operator >>- : DefaultPrecedence
     return constraint
 }
 
-
-
-func >>- <T:UIView> (lhs: (T,T),attributes: [NSLayoutAttribute]){
-    for attribute in attributes{
+func >>- <T: UIView> (lhs: (T, T), attributes: [NSLayoutAttribute]) {
+    for attribute in attributes {
         lhs >>- { (i: inout Constraint) in
             i.attribute = attribute
         }
     }
 }
 
-
-func >>- <T:UIView> (lhs: T, attributes: [NSLayoutAttribute]){
-    for attribute in attributes{
+func >>- <T: UIView> (lhs: T, attributes: [NSLayoutAttribute]) {
+    for attribute in attributes {
         lhs >>- { (i: inout Constraint) in
             i.attribute = attribute
         }
     }
 }
-
